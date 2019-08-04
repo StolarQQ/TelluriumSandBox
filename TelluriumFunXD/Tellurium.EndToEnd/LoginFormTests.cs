@@ -82,7 +82,7 @@ namespace Tellurium.EndToEnd
             {
                 BrowserType = BrowserType.Chrome,
                 SeleniumDriversPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Drivers"),
-                PageUrl = "http://localhost",
+                PageUrl = "http://localhost:52045",
                 ErrorScreenshotsPath = @"c:\selenium\",
                 BrowserDimensions = new BrowserDimensionsConfig
                 {
@@ -97,8 +97,30 @@ namespace Tellurium.EndToEnd
 
             using (var browser = BrowserAdapter.Create(browserAdapterConfig))
             {
-                //browser.NavigateTo("/demosite/Login.html");
-                browser.NavigateTo<TestFormController>(c => c.Index());
+
+                browser.NavigateTo<HomeController>(x => x.Index());
+                browser.ClickOnElementWithText("Register");
+                var regForm = browser.GetForm("register");                
+                regForm.SetFieldValue("Email", "stolar@o2.pl");
+                regForm.SetFieldValue("Password", "Abc123!");
+                regForm.SetFieldValue("ConfirmPassword", "Abc123!");
+                //regForm.ClickOnElementWithText("Register");
+                browser.ClickOnElementWithText("Home");
+               // browser.ClickOnElementWithText("Learn more »");
+                browser.ClickOnElementWithText("Open Modal");
+                browser.Wait(1);
+                var modal = browser.GetPageFragmentById("form-group");
+                modal.SetFieldValueByLabel("Email.form-control", "XD");
+                
+
+
+                //browser.ClickOnElementWithText("Submit");
+
+                
+                browser.ClickOnElementWithText("Open Modal");
+
+
+
                 browser.Wait(5);
                 //browser.RefreshPage();
 
